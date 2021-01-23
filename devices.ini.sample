@@ -1,13 +1,20 @@
-[bedroom]
-device_mac = 
-topic = sensors/bedroom
-availability_topic = sensors/bedroom/availability
+[livingroom]
+device_mac =
+topic = sensor/livingroom
 average = 3
-timeout = 5
+retain=1
+timeout = 10
+device =  MJ_HT_V1
+device_class =  temperature:humidity:battery
 
-[kidsroom]
+
+[flywithu]
 device_mac = 
-topic = sensors/kidsroom
-availability_topic = sensors/kidsroom/availability
-average = 5
-timeout = 5
+topic = sensor/flywithu
+average = 3
+retain=1
+timeout = 10
+device = LYWSD03MMC
+device_class = temperature:humidity:battery
+
+
