@@ -114,7 +114,7 @@ for device in devices:
             dataconfig=json.dumps(
                 {
                 "device_class": device_class,
-                "name": device+"_"+device_class,
+                "name": device_class.capitalize(),
                 "state_topic": config[device].get("topic")+"/state",
                 "value_template": "{{value_json."+device_class+"}}",        
                 "unique_id":config[device].get("device_mac")+"_"+str(i),
