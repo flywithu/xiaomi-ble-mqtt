@@ -54,4 +54,5 @@ MQTT Payload example:
 
 6. HomeAssistant will discover devices by automatically. 
 <img src="https://raw.githubusercontent.com/flywithu/xiaomi-ble-mqtt/master/img/20210124_115450.png">
+<img src="https://raw.githubusercontent.com/flywithu/xiaomi-ble-mqtt/master/img/20210124_123102.png">
 
