@@ -4,7 +4,7 @@ This is simple python script, which scans Xiaomi BLE Temperature and Humidity se
 This is support 2-types xiomi BLE Temperature and HomeAssistant MQTT auto discovery.
 
 I've got the reference for 'LYWSD03MMC' from https://github.com/JsBergbau/MiTemperature2
-
+<img src="https://raw.githubusercontent.com/flywithu/xiaomi-ble-mqtt/master/49B5FD854F3E3F516AAEB193B8D10E3F.webp">
 # Installation
 
 1.Install required packages:
