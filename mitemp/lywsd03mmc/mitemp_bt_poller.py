@@ -41,16 +41,6 @@ class MiTempBtPoller(object):
 
 
 
-    def name(self):
-        """Return the name of the sensor."""
-        with self._bt_interface.connect(self._mac) as connection:
-            name = connection.read_handle(_HANDLE_READ_NAME)  # pylint: disable=no-member
-
-        if not name:
-            raise BluetoothBackendException("Could not read NAME using handle %s"
-                                            " from Mi Temp sensor %s" % (hex(_HANDLE_READ_NAME), self._mac))
-        return ''.join(chr(n) for n in name)
-
     def fill_cache(self):
         """Fill the cache with new data from the sensor."""
         _LOGGER.debug('Filling cache with new sensor data.')
@@ -156,7 +146,7 @@ class MiTempBtPoller(object):
             _LOGGER.debug('self.cache_available()')
             self._last_read = datetime.now()
         else:
-            LOGGER.debug('NO self.cache_available()')
+            _LOGGER.debug('NO self.cache_available()')
             # If a sensor doesn't work, wait 5 minutes before retrying
             self._last_read = datetime.now() - self._cache_timeout + \
                 timedelta(seconds=300)
