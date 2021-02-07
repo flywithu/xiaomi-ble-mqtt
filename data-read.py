@@ -149,12 +149,14 @@ for device in devices:
         print(datetime.datetime.now(), "Error connecting to device {0}: {1}".format(device, str(e)))
         print(traceback.print_exc())
         #easy way for zombie
-        del poller
+        if poller != None:
+            del poller
     except Exception as e:
         availability = 'offline'
         print(datetime.datetime.now(), "Error polling device {0}. Device might be unreachable or offline.".format(device))
         print(traceback.print_exc())
-        del poller
+        if poller != None:
+            del poller
         #easy way for zombie
 #need to fix below
 #  7731 root      20   0    3644    660    576 R  48.5   0.1 260:51.29 bluepy-helper
