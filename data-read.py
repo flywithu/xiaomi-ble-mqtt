@@ -14,7 +14,8 @@ import configparser
 import os
 import json
 import datetime
-
+import sys
+import psutil
 # import logging
 # from mitemp.lywsd03mmc.mitemp_bt_poller import _LOGGER
 
@@ -22,6 +23,16 @@ import datetime
 # stream_hander = logging.StreamHandler()
 # _LOGGER.addHandler(stream_hander)
 
+
+###################### Remove zombie bluepy-helper pip3 install psutil
+##workaround 
+PROCNAME = "bluepy-helper"
+
+for proc in psutil.process_iter():
+    # check whether the process name matches
+    if proc.name() == PROCNAME:
+        proc.kill()
+##################################################################
 
 workdir = os.path.dirname(os.path.realpath(__file__))
 config = configparser.ConfigParser()
@@ -136,10 +147,25 @@ for device in devices:
     except BTLEException as e:
         availability = 'offline'
         print(datetime.datetime.now(), "Error connecting to device {0}: {1}".format(device, str(e)))
+        print(traceback.print_exc())
+        #easy way for zombie
+        del poller
     except Exception as e:
         availability = 'offline'
         print(datetime.datetime.now(), "Error polling device {0}. Device might be unreachable or offline.".format(device))
         print(traceback.print_exc())
+        del poller
+        #easy way for zombie
+#need to fix below
+#  7731 root      20   0    3644    660    576 R  48.5   0.1 260:51.29 bluepy-helper
+# 24703 root      20   0    3644    652    568 R  48.2   0.1  65:57.79 bluepy-helper
+# 27076 root      20   0    3644    652    568 R  48.2   0.1  38:59.71 bluepy-helper
+# 23034 root      20   0    3644    700    616 R  47.9   0.1  89:30.75 bluepy-helper
+#  6340 root      20   0    3644   2380   2244 R  47.6   0.3 270:11.43 bluepy-helper
+# 32136 root      20   0    3644   2380   2244 R  47.6   0.3 314:38.65 bluepy-helper
+# 23342 root      20   0    3644   2232   2096 R  47.2   0.2 374:22.19 bluepy-helper
+# 29199 root      20   0    3644   2268   2132 R  46.6   0.2 334:27.28 bluepy-helper
+
     # finally:
     #      messages.append({'topic': config[device].get("availability_topic"), 'payload': availability, 'retain': config[device].getboolean("retain", False)})
 
@@ -151,7 +177,7 @@ mqtt_config.read("{0}/mqtt.ini".format(workdir))
 mqtt_broker_cfg = mqtt_config["broker"]
 
 
-
+print("Try MQTT")
 try:
     auth = None
     mqtt_username = mqtt_broker_cfg.get("username")
@@ -160,7 +186,7 @@ try:
     if mqtt_username:
         auth = {"username": mqtt_username, "password": mqtt_password}
     # print(messages)
-    publish.multiple(messages, hostname=mqtt_broker_cfg.get("host"), port=mqtt_broker_cfg.getint("port"), client_id=mqtt_broker_cfg.get("client"), auth=auth)
+    publish.multiple(messages, keepalive=50,hostname=mqtt_broker_cfg.get("host"), port=mqtt_broker_cfg.getint("port"), client_id=mqtt_broker_cfg.get("client"), auth=auth)
 except Exception as ex:
     print(datetime.datetime.now(), "Error publishing to MQTT: {0}".format(str(ex)))
 
