@@ -13,6 +13,7 @@ I've got the reference for 'LYWSD03MMC' from https://github.com/JsBergbau/MiTemp
     
     sudo pip3 install bluepy
     sudo pip3 install paho-mqtt
+    sudo pip3 install psutil
 
 2.Clone code:
 
